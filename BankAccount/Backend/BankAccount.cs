@@ -12,7 +12,5 @@ namespace Backend
             accountId = id;
             balance = 0.00m;
         }
-
-        public decimal GetBalance() => balance;
     }
 }

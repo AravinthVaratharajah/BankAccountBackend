@@ -25,7 +25,7 @@ namespace UnitTest
 
             transaction.Deposit(account, expectedBalance);
 
-            Check.That(account.GetBalance()).IsEqualTo(expectedBalance);
+            Check.That(account.balance).IsEqualTo(expectedBalance);
         }
 
         [TestCase(1, 0.00)]
@@ -38,7 +38,7 @@ namespace UnitTest
 
             transaction.Withdraw(account, 100);
 
-            Check.That(account.GetBalance()).IsEqualTo(expectedBalance);
+            Check.That(account.balance).IsEqualTo(expectedBalance);
         }
 
         [TestCase(1, 150.00)]
@@ -47,9 +47,9 @@ namespace UnitTest
         {
             account = new BankAccount(accountId);
 
-            transaction.Withdraw(account, amountToWithDraw);
+            Action action = () => transaction.Withdraw(account, amountToWithDraw);
 
-            Check.ThatCode(() => { throw new Exception(); }).Throws<InvalidOperationException>();
+            Check.ThatCode(action).Throws<Exception>();
         }
 
         [TestCase(1, 150.00)]
@@ -61,11 +61,24 @@ namespace UnitTest
                 balance = 300.00m
             };
 
-            var balanceHistory = account.GetBalance();
+            var expected = account.balance - amountToWithDraw;
 
             transaction.Withdraw(account, amountToWithDraw);
 
-            Check.That(account.GetBalance()).IsEqualTo(balanceHistory-amountToWithDraw);
+            Check.That(account.balance).IsEqualTo(expected);
+        }
+
+
+        [TestCase]
+        public void Should_Return_The_Good_Balance()
+        {
+            account = new BankAccount(1);
+
+            transaction.Deposit(account, 100);
+            transaction.Withdraw(account, 50);
+            transaction.Withdraw(account, 50);
+
+            Check.That(account.balance).IsEqualTo(0);
         }
     }
 }

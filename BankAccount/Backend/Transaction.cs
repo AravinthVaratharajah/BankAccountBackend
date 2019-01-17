@@ -5,7 +5,14 @@ namespace Backend
     {
         public void Withdraw(BankAccount account, decimal amount)
         {
-            account.balance -= amount;
+            if(account.balance - amount >= 0)
+            {
+                account.balance -= amount;
+            }
+            else
+            {
+                throw new Exception();
+            }
         }
 
         public void Deposit(BankAccount account, decimal amount)
