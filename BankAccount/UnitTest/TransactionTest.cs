@@ -1,4 +1,5 @@
-﻿using Backend;
+﻿using System;
+using Backend;
 using NFluent;
 using NUnit.Framework;
 
@@ -24,7 +25,7 @@ namespace UnitTest
 
             transaction.Deposit(account, expectedBalance);
 
-            Check.That(account.GetBalance(account)).IsEqualTo(expectedBalance);
+            Check.That(account.GetBalance()).IsEqualTo(expectedBalance);
         }
 
         [TestCase(1, 0.00)]
@@ -37,7 +38,34 @@ namespace UnitTest
 
             transaction.Withdraw(account, 100);
 
-            Check.That(account.GetBalance(account)).IsEqualTo(expectedBalance);
+            Check.That(account.GetBalance()).IsEqualTo(expectedBalance);
+        }
+
+        [TestCase(1, 150.00)]
+        [TestCase(1, 250.00)]
+        public void Should_ThrowException_If_Customer_Try_To_Withdraw_Without_Balance(int accountId, decimal amountToWithDraw)
+        {
+            account = new BankAccount(accountId);
+
+            transaction.Withdraw(account, amountToWithDraw);
+
+            Check.ThatCode(() => { throw new Exception(); }).Throws<InvalidOperationException>();
+        }
+
+        [TestCase(1, 150.00)]
+        [TestCase(1, 250.00)]
+        public void Should_WithdrawMoney(int accountId, decimal amountToWithDraw)
+        {
+            account = new BankAccount(accountId)
+            {
+                balance = 300.00m
+            };
+
+            var balanceHistory = account.GetBalance();
+
+            transaction.Withdraw(account, amountToWithDraw);
+
+            Check.That(account.GetBalance()).IsEqualTo(balanceHistory-amountToWithDraw);
         }
     }
 }

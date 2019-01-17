@@ -13,6 +13,6 @@ namespace Backend
             balance = 0.00m;
         }
 
-        public decimal GetBalance (BankAccount account) => account.balance;
+        public decimal GetBalance() => balance;
     }
 }
