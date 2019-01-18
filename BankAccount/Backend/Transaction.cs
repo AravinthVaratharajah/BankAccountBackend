@@ -8,6 +8,7 @@ namespace Backend
             if(account.balance - amount >= 0)
             {
                 account.balance -= amount;
+                account.operations.Add(new Operation() { operationDate = DateTime.Now, amount = -amount });
             }
             else
             {
@@ -18,6 +19,7 @@ namespace Backend
         public void Deposit(BankAccount account, decimal amount)
         {
             account.balance += amount;
+            account.operations.Add(new Operation() { operationDate = DateTime.Now, amount = amount });
         }
     }
 }
