@@ -43,7 +43,7 @@ namespace UnitTest
 
         [TestCase(1, 150.00)]
         [TestCase(1, 250.00)]
-        public void Should_ThrowException_If_Customer_Try_To_Withdraw_Without_Balance(int accountId, decimal amountToWithDraw)
+        public void Should_Refuse_To_Withdraw_Without_Balance(int accountId, decimal amountToWithDraw)
         {
             account = new Account(accountId);
 
@@ -82,13 +82,23 @@ namespace UnitTest
         }
 
         [TestCase]
-        public void Should_ThrowException_If_Customer_Try_To_Withdraw_Negative_Amount_Balance()
+        public void Should_Refuse_Customer_To_Withdraw_Negative_Amount_Balance()
         {
             account = new Account(1);
 
             Action action = () => transaction.Withdraw(account, -10);
 
             Check.ThatCode(action).Throws< Exception> ();
+        }
+
+        [TestCase]
+        public void Should_Refuse_Customer_To_Deposit_Negative_Amount_Balance()
+        {
+            account = new Account(1);
+
+            Action action = () => transaction.Deposit(account, -10);
+
+            Check.ThatCode(action).Throws<Exception>();
         }
     }
 }
