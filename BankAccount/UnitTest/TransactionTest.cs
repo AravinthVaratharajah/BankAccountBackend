@@ -8,7 +8,7 @@ namespace UnitTest
     [TestFixture]
     public class TransactionTest
     {
-        public BankAccount account { get; set; }
+        public Account account { get; set; }
         public ITransaction transaction { get; set; }
 
         [SetUp]
@@ -21,7 +21,7 @@ namespace UnitTest
         [TestCase(2, 200.00)]
         public void Should_Deposit_Money_In_Account(int accountId, decimal expectedBalance)
         {
-            account = new BankAccount(accountId);
+            account = new Account(accountId);
 
             transaction.Deposit(account, expectedBalance);
 
@@ -31,7 +31,7 @@ namespace UnitTest
         [TestCase(1, 0.00)]
         public void Should_WithDraw_Money_In_Account(int accountId, decimal expectedBalance)
         {
-            account = new BankAccount(accountId)
+            account = new Account(accountId)
             {
                 balance = 100.00m
             };
@@ -45,18 +45,18 @@ namespace UnitTest
         [TestCase(1, 250.00)]
         public void Should_ThrowException_If_Customer_Try_To_Withdraw_Without_Balance(int accountId, decimal amountToWithDraw)
         {
-            account = new BankAccount(accountId);
+            account = new Account(accountId);
 
             Action action = () => transaction.Withdraw(account, amountToWithDraw);
 
-            Check.ThatCode(action).Throws<Exception>();
+            Check.ThatCode(action).Throws<InvalidOperationException>();
         }
 
         [TestCase(1, 150.00)]
         [TestCase(1, 250.00)]
         public void Should_WithdrawMoney(int accountId, decimal amountToWithDraw)
         {
-            account = new BankAccount(accountId)
+            account = new Account(accountId)
             {
                 balance = 300.00m
             };
@@ -72,13 +72,23 @@ namespace UnitTest
         [TestCase]
         public void Should_Return_The_Good_Balance()
         {
-            account = new BankAccount(1);
+            account = new Account(1);
 
             transaction.Deposit(account, 100);
             transaction.Withdraw(account, 50);
             transaction.Withdraw(account, 50);
 
             Check.That(account.balance).IsEqualTo(0);
+        }
+
+        [TestCase]
+        public void Should_ThrowException_If_Customer_Try_To_Withdraw_Negative_Amount_Balance()
+        {
+            account = new Account(1);
+
+            Action action = () => transaction.Withdraw(account, -10);
+
+            Check.ThatCode(action).Throws< Exception> ();
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Backend
     public interface ITransaction
     {
 
-        void Withdraw(BankAccount account, decimal amount);
-        void Deposit(BankAccount account, decimal amount);
+        void Withdraw(Account account, decimal amount);
+        void Deposit(Account account, decimal amount);
     }
 }

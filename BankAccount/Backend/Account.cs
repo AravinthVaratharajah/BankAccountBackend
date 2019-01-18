@@ -2,7 +2,7 @@
 
 namespace Backend
 {
-    public class BankAccount
+    public class Account
     {
         public int accountId { get; set; }
 
@@ -10,7 +10,7 @@ namespace Backend
 
         public List<Operation> operations { get; set; }
 
-        public BankAccount(int id)
+        public Account(int id)
         {
             accountId = id;
             balance = 0.00m;

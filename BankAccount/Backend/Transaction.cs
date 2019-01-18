@@ -3,20 +3,25 @@ namespace Backend
 {
     public class Transaction : ITransaction
     {
-        public void Withdraw(BankAccount account, decimal amount)
+        public void Withdraw(Account account, decimal amount)
         {
-            if(account.balance - amount >= 0)
+            if (amount <= 0)
+            {
+                throw new Exception("Amount to withdraw can't be negative");
+            }
+
+            if (account.balance - amount >= 0)
             {
                 account.balance -= amount;
                 account.operations.Add(new Operation() { operationDate = DateTime.Now, amount = -amount });
             }
             else
             {
-                throw new Exception();
+                throw new InvalidOperationException("Not enough funds");
             }
         }
 
-        public void Deposit(BankAccount account, decimal amount)
+        public void Deposit(Account account, decimal amount)
         {
             account.balance += amount;
             account.operations.Add(new Operation() { operationDate = DateTime.Now, amount = amount });
