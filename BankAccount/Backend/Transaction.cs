@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Backend
 {
-    public class Transaction
+    public class Transaction : ITransaction
     {
         public void Withdraw(BankAccount account, decimal amount)
         {

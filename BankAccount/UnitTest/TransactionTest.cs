@@ -9,7 +9,7 @@ namespace UnitTest
     public class TransactionTest
     {
         public BankAccount account { get; set; }
-        public Transaction transaction { get; set; }
+        public ITransaction transaction { get; set; }
 
         [SetUp]
         public void SetUp()
