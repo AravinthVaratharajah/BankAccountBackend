@@ -13,41 +13,34 @@ namespace Backend
 
             if (info.Key == ConsoleKey.D)
             {
-                Console.WriteLine("How much would you like to deposit ?");
-                var value = Console.ReadLine();
-                try
-                {
-                    int amount = int.Parse(value);
-                    transaction.Deposit(newaccount, amount);
-                    Console.WriteLine("Your new balance is " + newaccount.balance + "€");
-                    Console.ReadKey();
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message != null)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                }
+                MessageKeyPressed(newaccount, transaction, true);
             }
 
             if (info.Key == ConsoleKey.W)
             {
-                Console.WriteLine("How much would you like to withdraw ?");
-                var value = Console.ReadLine();
-                try
-                {
-                    int amount = int.Parse(value);
+                MessageKeyPressed(newaccount, transaction, false);
+            }
+        }
+
+        private static void MessageKeyPressed(Account newaccount, ITransaction transaction, Boolean isDeposit)
+        {
+            Console.WriteLine("What is the amount ?");
+            var value = Console.ReadLine();
+            try
+            {
+                int amount = int.Parse(value);
+                if(isDeposit)
+                    transaction.Deposit(newaccount, amount);
+                else
                     transaction.Withdraw(newaccount, amount);
-                    Console.WriteLine("Your new balance is " + newaccount.balance + "€");
-                    Console.ReadKey();
-                }
-                catch (Exception ex)
+                Console.WriteLine("Your new balance is " + newaccount.balance + "€");
+                Console.ReadKey();
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message != null)
                 {
-                    if(ex.Message != null)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
+                    Console.WriteLine(ex.Message);
                 }
             }
         }
